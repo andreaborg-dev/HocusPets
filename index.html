@@ -173,12 +173,16 @@ flex-direction:column;
 gap:15px;
 }
 
-input,textarea{
+input,textarea,select{
 padding:15px;
 border-radius:10px;
 border:none;
 background:rgba(255,255,255,0.08);
 color:white;
+}
+
+select option{
+color:black;
 }
 
 textarea{
@@ -225,7 +229,7 @@ transform:translateY(0);
 <span>Hocus Pets</span>
 </div>
 
-<button onclick="scrollToServices()">Book Now</button>
+<button onclick="scrollToContact()">Book Now</button>
 </nav>
 
 <section class="hero">
@@ -248,17 +252,25 @@ transform:translateY(0);
 
 <input type="email" name="email" placeholder="Your Email" required>
 
-<input type="text" id="serviceField" name="service" placeholder="Selected Service">
+<select name="service" id="serviceSelect" required>
+<option value="">Select a Service</option>
+<option>Pet Sitting</option>
+<option>Pet Walking</option>
+<option>Food Delivery</option>
+<option>Transportation</option>
+<option>Playtime</option>
+<option>Exotic Pets</option>
+</select>
 
 <textarea name="message" placeholder="Your Message" required></textarea>
 
-<button type="submit">Send Message</button>
+<button type="submit">Send Message ✨</button>
 
 </form>
 </section>
 
 <footer>
-Hocus Pets
+© 2026 Hocus Pets
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
@@ -315,11 +327,11 @@ tDiv.innerHTML += `
 `;
 });
 
-/* SCROLL */
+/* SCROLL FIX */
 
 function scrollToContact(){
 const section = document.getElementById("contact");
-const offset = 100;
+const offset = document.querySelector("nav").offsetHeight;
 
 window.scrollTo({
 top: section.offsetTop - offset,
@@ -329,25 +341,23 @@ behavior: "smooth"
 
 function scrollToServices(){
 const section = document.getElementById("services");
-const offset = 100;
+const offset = document.querySelector("nav").offsetHeight;
 
 window.scrollTo({
 top: section.offsetTop - offset,
 behavior: "smooth"
 });
 }
+
 function scrollTopPage(){
 window.scrollTo({top:0,behavior:"smooth"});
 }
 
-/* BOOK SERVICE AUTO FILL */
+/* AUTO SELECT SERVICE */
 
 function bookService(service){
-
-document.getElementById("serviceField").value = service;
-
+document.getElementById("serviceSelect").value = service;
 scrollToContact();
-
 }
 
 /* EMAILJS */
@@ -371,14 +381,13 @@ document.getElementById("contact-form").reset();
 }, function(error){
 
 alert("Failed to send ❌");
+console.log(error);
 
 });
 
 });
 
 /* FADE ANIMATION */
-
-const faders = document.querySelectorAll(".fade");
 
 window.addEventListener("scroll", ()=>{
 
