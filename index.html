@@ -1,305 +1,195 @@
 <!doctype html>
 <html lang="en">
-
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hocus Pets</title>
 
-<title>Hocus Pets</title>
+  <link rel="shortcut icon" href="Logo.webp" type="image/x-icon"/>
 
-<link rel="stylesheet" href="styles.css">
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet"/>
-
-<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="styles.css"/>
 </head>
 
 <body>
 
 <!-- NAVBAR -->
-
 <nav>
+  <div class="logo" onclick="scrollTopPage()">
+    <img src="Logo.webp"/>
+    <span>Hocus Pets</span>
+  </div>
 
-<div class="logo" onclick="scrollTopPage()">
-<img src="Logo.webp">
-<span>Hocus Pets</span>
-</div>
+  <div id="userArea">
+    <button id="navAuthBtn">Login</button>
 
-<div id="userArea">
+    <div id="userDropdown" class="dropdown">
+      <div id="userEmail"></div>
 
-<button id="navAuthBtn">
-Account
-</button>
+      <button id="changePasswordBtn">
+        Change Password
+      </button>
 
-<div class="dropdown">
-
-<!-- NOT LOGGED -->
-
-<div id="guestMenu">
-
-<button onclick="openLogin()">
-Login
-</button>
-
-<button onclick="openSignup()">
-Sign Up
-</button>
-
-</div>
-
-<!-- LOGGED -->
-
-<div id="userMenu" style="display:none;">
-
-<p id="userEmail"></p>
-<div class="loggedbuttons">
-<button id="changePasswordBtn">
-Change Password
-</button>
-
-<button id="logoutBtn">
-Logout
-</button>
-</div>
-</div>
-
-</div>
-</div>
-
+      <button id="logoutBtn">
+        Logout
+      </button>
+    </div>
+  </div>
 </nav>
 
 <!-- HERO -->
+<section class="hero">
+  <h1>Magical Care for Your Pets</h1>
 
-<section class="hero fade">
+  <p>
+    Professional pet sitting, walking, transportation and care with love and safety.
+  </p>
 
-<h1>Magical Care for Your Pets</h1>
-
-<p>
-Hocus Pets provides reliable, loving, and professional pet services
-to ensure your furry friends are safe, happy, and well cared for.
-</p>
-
-<button class="cta" onclick="scrollToServices()">
-Explore Services
-</button>
-
+  <button class="cta" onclick="scrollToServices()">
+    Book a Service
+  </button>
 </section>
 
 <!-- SERVICES -->
-
-<section id="services" class="services"></section>
+<section class="services fade" id="services"></section>
 
 <!-- TEAM -->
-
-<section id="team" class="team"></section>
+<section class="team fade" id="team"></section>
 
 <!-- CONTACT -->
+<section class="contact fade" id="contact">
+  <h1>Contact Us</h1>
 
-<section id="contact" class="contact fade">
+  <form id="contact-form">
 
-<h1>Book a Service</h1>
+    <input 
+      type="text"
+      name="name"
+      placeholder="Your Name"
+      required
+    />
 
-<br>
+    <input 
+      type="hidden"
+      name="time"
+      id="time"
+    />
 
-<form id="contact-form">
+    <input 
+      type="email"
+      name="email"
+      id="contactEmail"
+      placeholder="Your Email"
+      required
+    />
 
-<input 
-type="text"
-name="name"
-placeholder="Your Name"
-required
->
+    <select 
+      name="service"
+      id="serviceSelect"
+      required
+    >
+      <option value="">Select a Service</option>
+      <option>Pet Sitting</option>
+      <option>Pet Walking</option>
+      <option>Food Delivery</option>
+      <option>Transportation</option>
+      <option>Playtime</option>
+      <option>Exotic Pets</option>
+    </select>
 
-<input 
-type="email"
-name="email"
-id="contactEmail"
-placeholder="Your Email"
-required
->
+    <textarea 
+      name="message"
+      placeholder="Your Message"
+      required
+    ></textarea>
 
-<select 
-name="service"
-id="serviceSelect"
-required
->
+    <button type="submit">
+      Send Message
+    </button>
 
-<option value="">Select Service</option>
-
-<option>Pet Sitting</option>
-<option>Pet Walking</option>
-<option>Food Delivery</option>
-<option>Transportation</option>
-<option>Playtime</option>
-<option>Exotic Pets</option>
-
-</select>
-
-<textarea 
-name="message"
-placeholder="Message"
-required
-></textarea>
-
-<input 
-type="hidden"
-name="time"
-id="time"
->
-
-<button type="submit">
-Send Booking
-</button>
-
-</form>
-
+  </form>
 </section>
 
 <footer>
-
-© 2025 Hocus Pets — Magical Pet Care
-
+  Hocus Pets
 </footer>
 
-<!-- OVERLAY -->
-
+<!-- DARK OVERLAY -->
 <div id="overlay"></div>
 
 <!-- LOGIN MODAL -->
-
 <div id="loginModal" class="modal">
 
-<div class="modal-content">
+  <div class="modal-content">
 
-<!-- LOGIN FORM -->
+    <h2>Login / Sign Up</h2>
 
-<div id="loginForm">
+    <input 
+      id="authEmail"
+      type="email"
+      placeholder="Email"
+    />
 
-<h2>Login</h2>
+    <input 
+      id="authPassword"
+      type="password"
+      placeholder="Password"
+    />
 
-<input 
-type="email"
-id="loginEmail"
-placeholder="Email"
->
+    <input 
+      id="authConfirmPassword"
+      type="password"
+      placeholder="Confirm Password (Sign Up only)"
+    />
 
-<input 
-type="password"
-id="loginPassword"
-placeholder="Password"
->
+    <button id="loginBtn">
+      Login
+    </button>
 
-<button id="loginBtn">
-Login
-</button>
+    <button id="signupBtn">
+      Sign Up
+    </button>
 
-<p style="text-align:center; font-size:14px;">
+    <button class="closeBtn" onclick="closeLogin()">
+      Close
+    </button>
 
-Don't have an account?
+  </div>
 
-<span 
-onclick="showSignup()" 
-style="color:#F2C185; cursor:pointer;"
->
-Sign Up
-</span>
-
-</p>
-
-<button 
-class="closeBtn"
-onclick="closeLogin()"
->
-Close
-</button>
-
-</div>
-
-<!-- SIGNUP FORM -->
-
-<div id="signupForm" style="display:none;">
-
-<h2>Sign Up</h2>
-
-<input 
-type="email"
-id="signupEmail"
-placeholder="Email"
->
-
-<input 
-type="password"
-id="signupPassword"
-placeholder="Password"
->
-
-<input 
-type="password"
-id="signupConfirmPassword"
-placeholder="Confirm Password"
->
-
-<button id="signupBtn">
-Create Account
-</button>
-
-<p style="text-align:center; font-size:14px;">
-
-Already have an account?
-
-<span 
-onclick="showLogin()" 
-style="color:#F2C185; cursor:pointer;"
->
-Login
-</span>
-
-</p>
-
-<button 
-class="closeBtn"
-onclick="closeLogin()"
->
-Close
-</button>
-
-</div>
-
-</div>
 </div>
 
 <!-- CHANGE PASSWORD MODAL -->
-
 <div id="changePasswordModal" class="modal">
 
-<div class="modal-content">
+  <div class="modal-content">
 
-<h2>Change Password</h2>
+    <h2>Reset Password</h2>
 
-<input 
-type="email"
-id="resetEmail"
-placeholder="Enter your email"
->
+    <input 
+      id="resetEmail"
+      type="email"
+      placeholder="Enter your email"
+    />
 
-<button id="sendResetBtn">
-Send Reset Email
-</button>
+    <button id="sendResetBtn">
+      Send Reset Email
+    </button>
 
-<button 
-class="closeBtn"
-onclick="closeChangePassword()"
->
-Close
-</button>
+    <button 
+      class="closeBtn"
+      onclick="closeChangePassword()"
+    >
+      Close
+    </button>
+
+  </div>
 
 </div>
 
-</div>
+<!-- EMAILJS -->
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 
-<!-- SCRIPT -->
-
+<!-- MAIN SCRIPT -->
 <script type="module" src="script.js"></script>
 
 </body>
