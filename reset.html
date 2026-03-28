@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reset Password - Hocus Pets</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:'Poppins',sans-serif;
+    }
+
+    body{
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background:linear-gradient(135deg,#0f172a,#1e293b,#020617);
+      color:white;
+    }
+
+    .box{
+      background:#020617;
+      padding:40px;
+      border-radius:20px;
+      width:320px;
+      display:flex;
+      flex-direction:column;
+      gap:15px;
+      box-shadow:0 0 40px rgba(0,0,0,0.6);
+      text-align:center;
+    }
+
+    input{
+      padding:12px;
+      border:none;
+      border-radius:10px;
+      background:rgba(255,255,255,0.08);
+      color:white;
+    }
+
+    button{
+      padding:12px;
+      border:none;
+      border-radius:20px;
+      cursor:pointer;
+      background:linear-gradient(135deg,#F285A2,#3B9CD9);
+      color:white;
+    }
+
+    h2{
+      color:#F2C185;
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div class="box">
+
+  <h2>Reset Password</h2>
+
+  <input 
+    type="password"
+    id="newPassword"
+    placeholder="New Password"
+  />
+
+  <input 
+    type="password"
+    id="confirmPassword"
+    placeholder="Confirm Password"
+  />
+
+  <button onclick="resetPassword()">
+    Update Password
+  </button>
+
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+import { getAuth, confirmPasswordReset } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD3SOqBAtc664iu-5N-opr0LbHTXk0rOzc",
+  authDomain: "hocus-pets.firebaseapp.com",
+  projectId: "hocus-pets",
+  storageBucket: "hocus-pets.firebasestorage.app",
+  messagingSenderId: "665368562293",
+  appId: "1:665368562293:web:f9e330a2f991ad0c8a463c",
+  measurementId: "G-EQB95DJ7KR"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+// GET OOB CODE
+const urlParams = new URLSearchParams(window.location.search);
+const oobCode = urlParams.get("oobCode");
+
+window.resetPassword = async () => {
+
+  const newPass = document.getElementById("newPassword").value;
+  const confirmPass = document.getElementById("confirmPassword").value;
+
+  if(!newPass || !confirmPass){
+    alert("Fill all fields");
+    return;
+  }
+
+  if(newPass !== confirmPass){
+    alert("Passwords do not match");
+    return;
+  }
+
+  try{
+
+    await confirmPasswordReset(auth,oobCode,newPass);
+
+    alert("Password updated successfully");
+
+    window.location.href = "index.html";
+
+  }catch(err){
+
+    alert(err.message);
+
+  }
+
+};
+
+</script>
+
+</body>
+</html>
