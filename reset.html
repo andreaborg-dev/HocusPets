@@ -1,94 +1,124 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reset Password - Hocus Pets</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<title>Reset Password - Hocus Pets</title>
 
-  <style>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet"/>
 
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      font-family:'Poppins',sans-serif;
-    }
+<style>
 
-    body{
-      height:100vh;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      background:linear-gradient(135deg,#0f172a,#1e293b,#020617);
-      color:white;
-    }
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
 
-    .box{
-      background:#020617;
-      padding:40px;
-      border-radius:20px;
-      width:320px;
-      display:flex;
-      flex-direction:column;
-      gap:15px;
-      box-shadow:0 0 40px rgba(0,0,0,0.6);
-      text-align:center;
-    }
+body{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(135deg,#0f172a,#1e293b,#020617);
+color:white;
+}
 
-    input{
-      padding:12px;
-      border:none;
-      border-radius:10px;
-      background:rgba(255,255,255,0.08);
-      color:white;
-    }
+/* BOX */
 
-    button{
-      padding:12px;
-      border:none;
-      border-radius:20px;
-      cursor:pointer;
-      background:linear-gradient(135deg,#F285A2,#3B9CD9);
-      color:white;
-    }
+.box{
+background:#020617;
+padding:40px;
+border-radius:20px;
+width:350px;
+display:flex;
+flex-direction:column;
+gap:15px;
+box-shadow:0 0 40px rgba(0,0,0,0.6);
+text-align:center;
+}
 
-    h2{
-      color:#F2C185;
-    }
+/* TITLE */
 
-  </style>
+h2{
+color:#F2C185;
+}
+
+/* INPUTS */
+
+input{
+padding:12px;
+border:none;
+border-radius:10px;
+background:rgba(255,255,255,0.08);
+color:white;
+}
+
+/* BUTTON */
+
+button{
+padding:12px;
+border:none;
+border-radius:20px;
+cursor:pointer;
+background:linear-gradient(135deg,#F285A2,#3B9CD9);
+color:white;
+font-size:16px;
+}
+
+/* STATUS */
+
+#status{
+font-size:14px;
+color:#94a3b8;
+}
+
+</style>
+
 </head>
 
 <body>
 
 <div class="box">
 
-  <h2>Reset Password</h2>
+<h2>Reset Password</h2>
 
-  <input 
-    type="password"
-    id="newPassword"
-    placeholder="New Password"
-  />
+<p id="status">
+Enter your new password below
+</p>
 
-  <input 
-    type="password"
-    id="confirmPassword"
-    placeholder="Confirm Password"
-  />
+<input 
+type="password"
+id="newPassword"
+placeholder="New Password"
+>
 
-  <button onclick="resetPassword()">
-    Update Password
-  </button>
+<input 
+type="password"
+id="confirmPassword"
+placeholder="Confirm Password"
+>
+
+<button onclick="resetPassword()">
+Update Password
+</button>
 
 </div>
 
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
-import { getAuth, confirmPasswordReset } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+
+import {
+  getAuth,
+  confirmPasswordReset,
+  verifyPasswordResetCode
+} from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+
+// FIREBASE CONFIG
 
 const firebaseConfig = {
   apiKey: "AIzaSyD3SOqBAtc664iu-5N-opr0LbHTXk0rOzc",
@@ -103,9 +133,38 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// GET OOB CODE
+// GET RESET CODE
+
 const urlParams = new URLSearchParams(window.location.search);
 const oobCode = urlParams.get("oobCode");
+
+const statusText = document.getElementById("status");
+
+// VERIFY CODE
+
+if(!oobCode){
+
+  statusText.textContent = "Invalid reset link";
+  statusText.style.color = "red";
+
+}else{
+
+  verifyPasswordResetCode(auth,oobCode)
+  .then(email => {
+
+    statusText.textContent = "Resetting password for " + email;
+
+  })
+  .catch(() => {
+
+    statusText.textContent = "Reset link expired or invalid";
+    statusText.style.color = "red";
+
+  });
+
+}
+
+// RESET PASSWORD
 
 window.resetPassword = async () => {
 
@@ -113,13 +172,24 @@ window.resetPassword = async () => {
   const confirmPass = document.getElementById("confirmPassword").value;
 
   if(!newPass || !confirmPass){
+
     alert("Fill all fields");
     return;
+
   }
 
   if(newPass !== confirmPass){
+
     alert("Passwords do not match");
     return;
+
+  }
+
+  if(newPass.length < 6){
+
+    alert("Password must be at least 6 characters");
+    return;
+
   }
 
   try{
@@ -128,7 +198,7 @@ window.resetPassword = async () => {
 
     alert("Password updated successfully");
 
-    window.location.href = "index.html";
+    window.location.href = "https://www.hocuspets.com";
 
   }catch(err){
 
